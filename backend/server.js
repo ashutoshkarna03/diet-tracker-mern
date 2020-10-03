@@ -1,3 +1,5 @@
+'use strict'
+
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -12,13 +14,14 @@ app.use(cors());
 app.use(express.json());
 
 // mongodb connection
-const uri = process.env.MONGO_URI;
-mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true }
-);
-const connection = mongoose.connection;
-connection.once('open', () => {
-  console.log("MongoDB database connection established successfully");
-})
+const connection = require('./connection')
+
+// routes
+const dietRouter = require('./routes/diet');
+const usersRouter = require('./routes/users');
+
+app.use('/diet', dietRouter);
+app.use('/users', usersRouter);
 
 // start the server
 app.listen(port, () => {
